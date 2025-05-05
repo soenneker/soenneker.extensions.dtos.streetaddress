@@ -1,4 +1,4 @@
-# Contributing to Soenneker.Extensions.Dtos.StreetAddress
+﻿# Contributing to Soenneker.Extensions.Dtos.StreetAddress
 
 We're excited that you're interested in contributing!
 
