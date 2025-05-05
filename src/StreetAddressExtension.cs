@@ -17,8 +17,8 @@ public static class StreetAddressExtension
     /// <returns>A formatted address string.</returns>
     public static string ToFormattedString(this Soenneker.Dtos.StreetAddress.StreetAddress address)
     {
-        var sb = new StringBuilder(address.Street1.Length +
-                                   (address.Street2?.Length ?? 0) +
+        var sb = new StringBuilder(address.Line1.Length +
+                                   (address.Line2?.Length ?? 0) +
                                    address.City.Length +
                                    (address.State?.Length ?? 0) +
                                    (address.Province?.Length ?? 0) +
@@ -28,11 +28,11 @@ public static class StreetAddressExtension
                                    (address.AdditionalInfo?.Length ?? 0) +
                                    20); // Adding an estimated length for delimiters
 
-        sb.Append(address.Street1);
+        sb.Append(address.Line1);
 
-        if (!address.Street2.IsNullOrEmpty())
+        if (!address.Line2.IsNullOrEmpty())
         {
-            sb.Append(_delimiter).Append(address.Street2);
+            sb.Append(_delimiter).Append(address.Line2);
         }
 
         sb.Append(_delimiter).Append(address.City);

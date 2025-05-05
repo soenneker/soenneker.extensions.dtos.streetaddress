@@ -18,8 +18,8 @@ public class StreetAddressExtensionTests : FixturedUnitTest
         // Arrange
         var address = new Soenneker.Dtos.StreetAddress.StreetAddress
         {
-            Street1 = "123 Main St",
-            Street2 = "Apt 4B",
+            Line1 = "123 Main St",
+            Line2 = "Apt 4B",
             City = "Springfield",
             State = "IL",
             PostalCode = "62704",
@@ -40,7 +40,7 @@ public class StreetAddressExtensionTests : FixturedUnitTest
         // Arrange
         var address = new Soenneker.Dtos.StreetAddress.StreetAddress
         {
-            Street1 = "123 Main St",
+            Line1 = "123 Main St",
             City = "Springfield",
             State = "IL",
             PostalCode = "62704"
@@ -59,8 +59,8 @@ public class StreetAddressExtensionTests : FixturedUnitTest
         // Arrange
         var address = new Soenneker.Dtos.StreetAddress.StreetAddress
         {
-            Street1 = "123 Main St",
-            Street2 = null,
+            Line1 = "123 Main St",
+            Line2 = null,
             City = "Springfield",
             State = "IL",
             PostalCode = "62704",
