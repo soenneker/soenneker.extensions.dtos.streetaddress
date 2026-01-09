@@ -1,5 +1,5 @@
-using System.Text;
 using Soenneker.Extensions.String;
+using Soenneker.Utils.PooledStringBuilders;
 
 namespace Soenneker.Extensions.Dtos.StreetAddress;
 
@@ -35,31 +35,51 @@ public static class StreetAddressExtension
     /// </example>
     public static string ToFormattedString(this Soenneker.Dtos.StreetAddress.StreetAddress address)
     {
-        var sb = new StringBuilder(128);
+        using var psb = new PooledStringBuilder(128);
 
-        sb.Append(address.Line1);
+        psb.Append(address.Line1);
 
         if (!address.Line2.IsNullOrEmpty())
-            sb.Append(_delimiter).Append(address.Line2);
+        {
+            psb.Append(_delimiter);
+            psb.Append(address.Line2);
+        }
 
-        sb.Append(_delimiter).Append(address.City);
+        psb.Append(_delimiter);
+        psb.Append(address.City);
 
         if (!address.State.IsNullOrEmpty())
-            sb.Append(_delimiter).Append(address.State);
+        {
+            psb.Append(_delimiter);
+            psb.Append(address.State);
+        }
         else if (!address.Province.IsNullOrEmpty())
-            sb.Append(_delimiter).Append(address.Province);
+        {
+            psb.Append(_delimiter);
+            psb.Append(address.Province);
+        }
         else if (!address.Region.IsNullOrEmpty())
-            sb.Append(_delimiter).Append(address.Region);
+        {
+            psb.Append(_delimiter);
+            psb.Append(address.Region);
+        }
 
-        sb.Append(_delimiter).Append(address.PostalCode);
+        psb.Append(_delimiter);
+        psb.Append(address.PostalCode);
 
         if (!address.Country.IsNullOrEmpty())
-            sb.Append(_delimiter).Append(address.Country);
+        {
+            psb.Append(_delimiter);
+            psb.Append(address.Country);
+        }
 
         if (!address.AdditionalInfo.IsNullOrEmpty())
-            sb.Append(_delimiter).Append(address.AdditionalInfo);
+        {
+            psb.Append(_delimiter);
+            psb.Append(address.AdditionalInfo);
+        }
 
-        return sb.ToString();
+        return psb.ToString();
     }
 
     /// <summary>
@@ -88,47 +108,57 @@ public static class StreetAddressExtension
     /// </example>
     public static string ToFormattedHtmlString(this Soenneker.Dtos.StreetAddress.StreetAddress address)
     {
-        var sb = new StringBuilder(128);
+        using var psb = new PooledStringBuilder(128);
 
-        sb.Append(address.Line1);
+        psb.Append(address.Line1);
 
         if (!address.Line2.IsNullOrEmpty())
-            sb.Append(_htmlLineBreak).Append(address.Line2);
+        {
+            psb.Append(_htmlLineBreak);
+            psb.Append(address.Line2);
+        }
 
         var hasLine3 = false;
 
         if (!address.City.IsNullOrEmpty())
         {
-            sb.Append(_htmlLineBreak).Append(address.City);
+            psb.Append(_htmlLineBreak);
+            psb.Append(address.City);
             hasLine3 = true;
         }
 
         if (!address.State.IsNullOrEmpty())
         {
-            sb.Append(hasLine3 ? ", " : _htmlLineBreak).Append(address.State);
+            psb.Append(hasLine3 ? ", " : _htmlLineBreak);
+            psb.Append(address.State);
             hasLine3 = true;
         }
         else if (!address.Province.IsNullOrEmpty())
         {
-            sb.Append(hasLine3 ? ", " : _htmlLineBreak).Append(address.Province);
+            psb.Append(hasLine3 ? ", " : _htmlLineBreak);
+            psb.Append(address.Province);
             hasLine3 = true;
         }
         else if (!address.Region.IsNullOrEmpty())
         {
-            sb.Append(hasLine3 ? ", " : _htmlLineBreak).Append(address.Region);
+            psb.Append(hasLine3 ? ", " : _htmlLineBreak);
+            psb.Append(address.Region);
             hasLine3 = true;
         }
 
         if (!address.PostalCode.IsNullOrEmpty())
         {
-            sb.Append(hasLine3 ? " " : _htmlLineBreak).Append(address.PostalCode);
+            psb.Append(hasLine3 ? " " : _htmlLineBreak);
+            psb.Append(address.PostalCode);
         }
 
         if (!address.Country.IsNullOrEmpty())
         {
-            sb.Append(" (").Append(address.Country).Append(')');
+            psb.Append(" (");
+            psb.Append(address.Country);
+            psb.Append(')');
         }
 
-        return sb.ToString();
+        return psb.ToString();
     }
 }
