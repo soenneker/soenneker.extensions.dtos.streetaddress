@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?><Project Sdk="Microsoft.NET.Sdk">
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
@@ -32,10 +34,11 @@
         <LangVersion>latest</LangVersion>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>icon.png</PackageIcon>
-    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
         <PackageReleaseNotes Condition="'$(PACKAGE_RELEASE_NOTES)' != ''">
             $(PACKAGE_RELEASE_NOTES)
-        </PackageReleaseNotes></PropertyGroup>
+        </PackageReleaseNotes>
+    </PropertyGroup>
 
     <ItemGroup>
         <None Include="..\..\README.md" Pack="true" PackagePath="\" />
@@ -44,8 +47,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Soenneker.Dtos.StreetAddress" Version="4.0.503" />
-      <PackageReference Include="Soenneker.Extensions.String" Version="4.0.665" />
-      <PackageReference Include="Soenneker.Utils.PooledStringBuilders" Version="4.0.21" />
+        <PackageReference Include="Soenneker.Dtos.StreetAddress" Version="4.0.503" />
+        <PackageReference Include="Soenneker.Extensions.String" Version="4.0.665" />
     </ItemGroup>
 </Project>
