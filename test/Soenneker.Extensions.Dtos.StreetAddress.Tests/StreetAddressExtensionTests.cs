@@ -1,18 +1,16 @@
 using AwesomeAssertions;
-using Soenneker.Tests.FixturedUnit;
-using Xunit;
-
+using Soenneker.Tests.HostedUnit;
 
 namespace Soenneker.Extensions.Dtos.StreetAddress.Tests;
 
-[Collection("Collection")]
-public class StreetAddressExtensionTests : FixturedUnitTest
+[ClassDataSource<Host>(Shared = SharedType.PerTestSession)]
+public class StreetAddressExtensionTests : HostedUnitTest
 {
-    public StreetAddressExtensionTests(Fixture fixture, ITestOutputHelper output) : base(fixture, output)
+    public StreetAddressExtensionTests(Host host) : base(host)
     {
     }
 
-    [Fact]
+    [Test]
     public void ToFormattedString_ValidAddress_ReturnsFormattedString()
     {
         // Arrange
@@ -34,7 +32,7 @@ public class StreetAddressExtensionTests : FixturedUnitTest
         formattedAddress.Should().Be("123 Main St, Apt 4B, Springfield, IL, 62704, USA, Near the big park");
     }
 
-    [Fact]
+    [Test]
     public void ToFormattedString_AddressWithoutOptionalFields_ReturnsFormattedString()
     {
         // Arrange
@@ -53,7 +51,7 @@ public class StreetAddressExtensionTests : FixturedUnitTest
         formattedAddress.Should().Be("123 Main St, Springfield, IL, 62704");
     }
 
-    [Fact]
+    [Test]
     public void ToFormattedString_AddressWithNullFields_ReturnsFormattedString()
     {
         // Arrange
