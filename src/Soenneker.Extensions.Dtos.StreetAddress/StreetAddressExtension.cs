@@ -1,3 +1,4 @@
+using System.Net;
 using Soenneker.Extensions.String;
 using Soenneker.Utils.PooledStringBuilders;
 
@@ -36,46 +37,64 @@ public static class StreetAddressExtension
     public static string ToFormattedString(this Soenneker.Dtos.StreetAddress.StreetAddress address)
     {
         using var psb = new PooledStringBuilder(128);
+        var hasComponent = false;
 
-        psb.Append(address.Line1);
+        if (!address.Line1.IsNullOrEmpty())
+        {
+            psb.Append(address.Line1);
+            hasComponent = true;
+        }
 
         if (!address.Line2.IsNullOrEmpty())
         {
-            psb.Append(_delimiter);
+            if (hasComponent)
+                psb.Append(_delimiter);
             psb.Append(address.Line2);
+            hasComponent = true;
         }
 
-        psb.Append(_delimiter);
-        psb.Append(address.City);
-
-        if (!address.State.IsNullOrEmpty())
+        if (!address.City.IsNullOrEmpty())
         {
-            psb.Append(_delimiter);
-            psb.Append(address.State);
-        }
-        else if (!address.Province.IsNullOrEmpty())
-        {
-            psb.Append(_delimiter);
-            psb.Append(address.Province);
-        }
-        else if (!address.Region.IsNullOrEmpty())
-        {
-            psb.Append(_delimiter);
-            psb.Append(address.Region);
+            if (hasComponent)
+                psb.Append(_delimiter);
+            psb.Append(address.City);
+            hasComponent = true;
         }
 
-        psb.Append(_delimiter);
-        psb.Append(address.PostalCode);
+        string? administrativeArea = !address.State.IsNullOrEmpty()
+            ? address.State
+            : !address.Province.IsNullOrEmpty()
+                ? address.Province
+                : address.Region;
+
+        if (!administrativeArea.IsNullOrEmpty())
+        {
+            if (hasComponent)
+                psb.Append(_delimiter);
+            psb.Append(administrativeArea);
+            hasComponent = true;
+        }
+
+        if (!address.PostalCode.IsNullOrEmpty())
+        {
+            if (hasComponent)
+                psb.Append(_delimiter);
+            psb.Append(address.PostalCode);
+            hasComponent = true;
+        }
 
         if (!address.Country.IsNullOrEmpty())
         {
-            psb.Append(_delimiter);
+            if (hasComponent)
+                psb.Append(_delimiter);
             psb.Append(address.Country);
+            hasComponent = true;
         }
 
         if (!address.AdditionalInfo.IsNullOrEmpty())
         {
-            psb.Append(_delimiter);
+            if (hasComponent)
+                psb.Append(_delimiter);
             psb.Append(address.AdditionalInfo);
         }
 
@@ -109,53 +128,65 @@ public static class StreetAddressExtension
     public static string ToFormattedHtmlString(this Soenneker.Dtos.StreetAddress.StreetAddress address)
     {
         using var psb = new PooledStringBuilder(128);
+        var hasOutput = false;
 
-        psb.Append(address.Line1);
+        if (!address.Line1.IsNullOrEmpty())
+        {
+            psb.Append(WebUtility.HtmlEncode(address.Line1));
+            hasOutput = true;
+        }
 
         if (!address.Line2.IsNullOrEmpty())
         {
-            psb.Append(_htmlLineBreak);
-            psb.Append(address.Line2);
+            if (hasOutput)
+                psb.Append(_htmlLineBreak);
+            psb.Append(WebUtility.HtmlEncode(address.Line2));
+            hasOutput = true;
         }
 
-        var hasLine3 = false;
+        string? administrativeArea = !address.State.IsNullOrEmpty()
+            ? address.State
+            : !address.Province.IsNullOrEmpty()
+                ? address.Province
+                : address.Region;
+
+        bool hasLocalityLine = !address.City.IsNullOrEmpty() || !administrativeArea.IsNullOrEmpty() || !address.PostalCode.IsNullOrEmpty() ||
+                               !address.Country.IsNullOrEmpty();
+
+        if (hasLocalityLine && hasOutput)
+            psb.Append(_htmlLineBreak);
+
+        var hasLocalityComponent = false;
 
         if (!address.City.IsNullOrEmpty())
         {
-            psb.Append(_htmlLineBreak);
-            psb.Append(address.City);
-            hasLine3 = true;
+            psb.Append(WebUtility.HtmlEncode(address.City));
+            hasLocalityComponent = true;
         }
 
-        if (!address.State.IsNullOrEmpty())
+        if (!administrativeArea.IsNullOrEmpty())
         {
-            psb.Append(hasLine3 ? ", " : _htmlLineBreak);
-            psb.Append(address.State);
-            hasLine3 = true;
-        }
-        else if (!address.Province.IsNullOrEmpty())
-        {
-            psb.Append(hasLine3 ? ", " : _htmlLineBreak);
-            psb.Append(address.Province);
-            hasLine3 = true;
-        }
-        else if (!address.Region.IsNullOrEmpty())
-        {
-            psb.Append(hasLine3 ? ", " : _htmlLineBreak);
-            psb.Append(address.Region);
-            hasLine3 = true;
+            if (hasLocalityComponent)
+                psb.Append(", ");
+            psb.Append(WebUtility.HtmlEncode(administrativeArea));
+            hasLocalityComponent = true;
         }
 
         if (!address.PostalCode.IsNullOrEmpty())
         {
-            psb.Append(hasLine3 ? " " : _htmlLineBreak);
-            psb.Append(address.PostalCode);
+            if (hasLocalityComponent)
+                psb.Append(' ');
+            psb.Append(WebUtility.HtmlEncode(address.PostalCode));
+            hasLocalityComponent = true;
         }
 
         if (!address.Country.IsNullOrEmpty())
         {
-            psb.Append(" (");
-            psb.Append(address.Country);
+            if (hasLocalityComponent)
+                psb.Append(" (");
+            else
+                psb.Append('(');
+            psb.Append(WebUtility.HtmlEncode(address.Country));
             psb.Append(')');
         }
 

@@ -72,4 +72,31 @@ public class StreetAddressExtensionTests : HostedUnitTest
         // Assert
         formattedAddress.Should().Be("123 Main St, Springfield, IL, 62704");
     }
+
+    [Test]
+    public void ToFormattedString_skips_missing_leading_and_middle_components()
+    {
+        var address = new Soenneker.Dtos.StreetAddress.StreetAddress
+        {
+            Province = "ON",
+            Country = "CA"
+        };
+
+        address.ToFormattedString().Should().Be("ON, CA");
+    }
+
+    [Test]
+    public void ToFormattedHtmlString_encodes_address_components()
+    {
+        var address = new Soenneker.Dtos.StreetAddress.StreetAddress
+        {
+            Line1 = "1 <Main> & Co",
+            City = "A&B",
+            State = "TX",
+            PostalCode = "75001",
+            Country = "US"
+        };
+
+        address.ToFormattedHtmlString().Should().Be("1 &lt;Main&gt; &amp; Co<br/>A&amp;B, TX 75001 (US)");
+    }
 }
