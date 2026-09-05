@@ -45,6 +45,6 @@
 
     <ItemGroup>
         <PackageReference Include="Soenneker.Dtos.StreetAddress" Version="4.0.525" />
-        <PackageReference Include="Soenneker.Extensions.String" Version="4.0.738" />
+        <PackageReference Include="Soenneker.Extensions.String" Version="4.0.739" />
     </ItemGroup>
 </Project>
